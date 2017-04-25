@@ -232,10 +232,6 @@
       <Project>{92ea9398-9244-4daa-8e7d-2f6bec338cab}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\..\plugin\pango\gvplugin_pango.vcxproj">
-      <Project>{42c526f9-36e5-4b20-92ca-265c90058651}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
