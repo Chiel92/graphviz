@@ -7,7 +7,7 @@
 #include <subset.h>
 #include <assert.h>
 */
-#include <spine.h>
+#include "spine.h"
 
 #define N_NEW(n,t)       (t*)mcalloc((n),sizeof(t))
 #define NEW(t)       (t*)mcalloc((1),sizeof(t))

@@ -1,13 +1,14 @@
 /* vim:set shiftwidth=4 ts=4: */
 
-#include <spinehdr.h>
-#include <subset.h>
-#include <quad.h>
+#include "spinehdr.h"
+#include "subset.h"
+#include "quad.h"
 #include "union_find.h"
 #include "assert.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <cdt.h>
 #ifdef MAIN
 #include <getopt.h>
 #include "ingraphs.h"
@@ -415,7 +416,7 @@ void genSpine(Agraph_t * g, float sparse_ratio, int verbose)
 {
 	Agraph_t *sg_union;
 	Agnode_t *n;
-	Agedge_t *e;
+	Agedge_t *e = NULL;
 	Agedge_t **edgelist;
 	size_t i, index;
 	size_t nedges;

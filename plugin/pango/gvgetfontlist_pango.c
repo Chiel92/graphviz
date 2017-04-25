@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <glib/gmem.h>
 
 /* FIXME - the following declaration should be removed
  * when configure is coordinated with flags passed to the
