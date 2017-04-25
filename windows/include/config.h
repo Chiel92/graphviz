@@ -29,7 +29,7 @@
 #define GVPLUGIN_VERSION 6
 
 /* Define if you want on-demand plugin loading */
-#define ENABLE_LTDL 1
+// #define ENABLE_LTDL 1
 
 /* Define if you have the ann library */
 #define HAVE_ANN 1
@@ -53,7 +53,7 @@
 /* #undef HAVE_DRAND48 */
 
 /* Define if you have the expat library */
-#define HAVE_EXPAT 1
+// #define HAVE_EXPAT 1
 
 /* Define to 1 if you have the <expat.h> header file. */
 #define HAVE_EXPAT_H 1
@@ -162,7 +162,7 @@
 /* #undef HAVE_LIBXPMFORLEFTY */
 
 /* Define if you have the Z library */
-#define HAVE_LIBZ 1
+// #define HAVE_LIBZ 1
 
 /* Define to 1 if you have the `lrand48' function. */
 /* #undef HAVE_LRAND48 */
@@ -263,7 +263,7 @@
 /* #undef HAVE_TRIANGLE */
 
 /* Define to 1 if you have the <unistd.h> header file. */
-//#define HAVE_UNISTD_H 1
+#define HAVE_UNISTD_H 1
 
 /* Define to 1 if you have the `vsnprintf' function. */
 #define HAVE_VSNPRINTF 1
