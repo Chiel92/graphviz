@@ -28,7 +28,7 @@
 #define DMKEY "Software\\Microsoft" //key to look for library dir
 #endif
 
-#include <regex.h>
+
 #include "types.h"
 #include "logic.h"
 #include "memory.h"
@@ -166,37 +166,83 @@ static unsigned int svg_units_convert(double n, char *u)
     return 0;
 }
 
-static char* svg_attr_value_re = "([a-z][a-zA-Z]*)=\"([^\"]*)\"";
-static regex_t re, *pre = NULL;
+/// Searches in line starting at start for an attribute.
+/// If found returns true and sets attr_name and attr_value.
+/// SVG attributes are of the form:
+/// attributeName="value1 value2 value3"
+/// ([a-z][a-zA-Z]*)=\"([^\"]*)\"
+static bool find_svg_attribute(int start, int end, char* line, char* attr_name, char* attr_value)
+{
+    const int SEARCH_START_ATTRIBUTE = 0;
+    const int IN_ATTRIBUTE_NAME = 1;
+    const int IN_ATTRIBUTE_VALUE = 2;
+
+    int state = SEARCH_START_ATTRIBUTE;
+    int posName = 0;
+    int posValue = 0;
+
+    for (int pos = start; pos < end; pos++)
+    {
+        if (state == SEARCH_START_ATTRIBUTE && line[pos] >= 'a' && line[pos] <= 'z')
+        {
+            // start of attribute name is found
+            attr_name[posName] = line[pos];
+            posName++;
+            state = IN_ATTRIBUTE_NAME;
+        }
+        else if (state == IN_ATTRIBUTE_NAME && isalpha(line[pos]))
+        {
+            attr_name[posName] = line[pos];
+            posName++;
+        }
+        else if (state == IN_ATTRIBUTE_NAME && line[pos] == '=' && pos < end - 2 && line[pos + 1] == '"')
+        {
+            // name-value separator found
+            attr_name[posName] = '\0'; // close attribute name
+            pos++; // skip opening
+            state = IN_ATTRIBUTE_VALUE;
+        }
+        else if (state == IN_ATTRIBUTE_NAME)
+        {
+            // unexpected character found, start searching again
+            posName = 0;
+            state = SEARCH_START_ATTRIBUTE;
+        }
+        else if (state == IN_ATTRIBUTE_VALUE && line[pos] != '"')
+        {
+            attr_value[posValue] = line[pos];
+            posValue++;
+        }
+        else if (state == IN_ATTRIBUTE_VALUE && line[pos] == '"')
+        {
+            // closing quote of value found
+            attr_value[posValue] = '\0';
+            return true;
+        }
+    }
+
+    attr_name[0] = '\0';
+    attr_value[0] = '\0';
+    return false;
+}
 
 static void svg_size (usershape_t *us)
 {
     unsigned int w = 0, h = 0;
     double n, x0, y0, x1, y1;
     char u[10];
-    char *attribute, *value, *re_string;
+    char *attribute, *value;
     char line[200];
     boolean wFlag = FALSE, hFlag = FALSE;
-#define RE_NMATCH 4
-    regmatch_t re_pmatch[RE_NMATCH];
-
-    /* compile on first use */
-    if (! pre) {
-        if (regcomp(&re, svg_attr_value_re, REG_EXTENDED) != 0) {
-	    agerr(AGERR,"cannot compile regular expression %s", svg_attr_value_re);
-    	}
-	pre = &re;
-    }
 
     fseek(us->f, 0, SEEK_SET);
-    while (fgets(line, sizeof(line), us->f) != NULL && (!wFlag || !hFlag)) {
-	re_string = line;
-	while (regexec(&re, re_string, RE_NMATCH, re_pmatch, 0) == 0) {
-	    re_string[re_pmatch[1].rm_eo] = '\0';
-	    re_string[re_pmatch[2].rm_eo] = '\0';
-	    attribute = re_string + re_pmatch[1].rm_so;
-	    value = re_string + re_pmatch[2].rm_so;
-    	    re_string += re_pmatch[0].rm_eo + 1;
+    while (fgets(line, sizeof(line), us->f) != NULL && (!wFlag || !hFlag)) 
+    {
+        int start_search = 0;
+
+        while (find_svg_attribute(start_search = 0, sizeof(line), line, attribute, value))
+        {
+            start_search += strlen(attribute) + strlen(attribute) + 3; // +3 for equal sign and quotes
 
 	    if (strcmp(attribute,"width") == 0) {
 	        if (sscanf(value, "%lf%2s", &n, u) == 2) {
