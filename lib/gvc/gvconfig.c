@@ -360,6 +360,8 @@ char * gvconfig_libdir(GVC_t * gvc)
 }
 #endif
 
+#if 0
+
 #ifdef ENABLE_LTDL
 static void config_rescan(GVC_t *gvc, char *config_path)
 {
@@ -472,6 +474,8 @@ static void config_rescan(GVC_t *gvc, char *config_path)
 }
 #endif
 
+#endif
+
 /*
   gvconfig - parse a config file and install the identified plugins
  */
@@ -513,12 +517,13 @@ void gvconfig(GVC_t * gvc, boolean rescan)
             strcat(gvc->config_path, config_file_name);
         }
     	
-        if (rescan) {
-    	    config_rescan(gvc, gvc->config_path);
-    	    gvc->config_found = TRUE;
-	    gvtextlayout_select(gvc);   /* choose best available textlayout plugin immediately */
-    	    return;
-        }
+        // FIXME
+     //   if (rescan) {
+    	//    config_rescan(gvc, gvc->config_path);
+    	//    gvc->config_found = TRUE;
+	    //gvtextlayout_select(gvc);   /* choose best available textlayout plugin immediately */
+    	//    return;
+     //   }
     
         /* load in the cached plugin library data */
     
