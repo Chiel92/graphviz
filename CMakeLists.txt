@@ -68,18 +68,18 @@ else()
     list(APPEND CMAKE_INCLUDE_PATH /usr/lib /usr/local/lib)
 endif()
 
-find_package(ANN)
-find_package(EXPAT)
-find_package(GD)
+#find_package(ANN)
+#find_package(EXPAT)
+#find_package(GD)
 find_package(LTDL)
 find_package(ZLIB)
 
 if (WIN32)
     # Find Windows specific dependencies
-    find_package(RxSpencer REQUIRED)
+    #find_package(RxSpencer REQUIRED)
 
     # Find DLLs on Windows
-    find_file(EXPAT_RUNTIME_LIBRARIES NAMES libexpat.dll expat.dll)
+    #find_file(EXPAT_RUNTIME_LIBRARIES NAMES libexpat.dll expat.dll)
     find_file(ZLIB_RUNTIME_LIBRARIES NAMES zlib1.dll zlib.dll)
 endif()
 
