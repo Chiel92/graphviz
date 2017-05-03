@@ -11,11 +11,41 @@
  * Contributors: See CVS logs. Details at http://www.graphviz.org/
  *************************************************************************/
 
+
+
+
+#include <Windows.h>
+
+typedef HMODULE lt_dlhandle;
+typedef void* lt_ptr;
+
+int lt_dlinit()
+{
+    return 0;
+}
+
+const char* lt_dlerror()
+{
+    return "not implemented";
+}
+
+lt_dlhandle lt_dlopen(char* p)
+{
+    return LoadLibrary(p);
+}
+
+void* lt_dlsym(lt_dlhandle hndl, char* s)
+{
+    return GetProcAddress(hndl, s);
+}
+
+
+
 #include "config.h"
 
 #include	<string.h>
 #ifdef ENABLE_LTDL
-#include	<ltdl.h>
+//#include	<ltdl.h>
 #endif
 
 #include	<agxbuf.h>
